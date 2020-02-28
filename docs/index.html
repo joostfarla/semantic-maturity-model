@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Semantic Maturity Model</title>
+    <script src="https://www.w3.org/Tools/respec/respec-w3c" class="remove" async></script>
+    <script class="remove">
+      var respecConfig = {
+        specStatus: 'unofficial',
+        editors: [
+          {
+            name: 'Joost Farla',
+            url: 'https://www.linkedin.com/in/joostfarla',
+          },
+          {
+            name: 'Pano Maria',
+            url: 'https://www.linkedin.com/in/panomaria',
+          }
+        ],
+        github: 'joostfarla/semantic-maturity-model',
+        shortName: 'semantic-maturity-model',
+      };
+    </script>
+  </head>
+  <body>
+    <section id="abstract">
+      <p>
+        This document describes a maturity model to uplift existing API's to semantically rich API's.
+      </p>
+    </section>
+    <section id="intro">
+      <h2>Introduction</h2>
+      <p>TODO</p>
+      <section id="intro-audience">
+        <h3>Audience</h3>
+        <p>TODO</p>
+      </section>
+      <section id="intro-goals">
+        <h3>Goals</h3>
+        <p>TODO</p>
+      </section>
+    </section>
+    <section id="terminology">
+      <h2>Terminology</h2>
+      <p>TODO</p>
+    </section>
+    <section id="level-0">
+      <h2>Level 0: Use globally unique identifiers</h2>
+      <p>TODO: uitleg over URIs</p>
+      <section id="level-0-own-uris">
+        <h3>Publish URIs for your own data</h3>
+        <p>It's pretty common for organizations to create local identifiers to store and publish information about resources. In many cases, these local identifiers are primarily used as a unique identifier for storing the data in a local database (as a primary or foreign key) and for exposing unique URLs to make the information available on the web.</p>
+        <aside class="example">
+          <p>If a movie review website would publish a review about the movie Pulp Fiction, it might be available as an HTML page to view the information from a web browser:</p>
+          <pre>
+            https://example.org/reviews/6283746/pulp-fiction
+          </pre>
+          <p>If this same website offers a REST API, the same review would also be available at:
+          <pre>
+            https://api.example.org/v1/reviews/6283746
+          </pre>
+          <p>And the corresponding response payload would typically look like this:</p>
+          <pre>
+            {
+              "id": 6283746,
+              "author": {
+                "id": 1536,
+                "name": "Vincent Vega"
+              },
+              "movie": {
+                "title": "Pulp Fiction",
+                "year": 1994
+              },
+              "comment": "What an impressive movie!",
+              "rating": 9.5
+            }
+          </pre>
+        </aside>
+        <p>In this example, it's interesting to note that there are multiple documents describing the same review. In the API response, the value of the `id` attribute is probably the primary key of the record in which this review is stored in the website's database. This is often a numeric value which might be automatically incremented for every new review, but it could also be some randomly generated value, like a UUID.</p>
+        <p>Another interesting thing to note is that the HTML URL does not only contain this (locally) unique identifier, but also some human-readable value (often called a "slug") to make the URL more attractive for humans and to improve SEO (Search Engine Optimization).</p>
+        <p>The example API response provides information about 3 different resources:</p>
+        <ol>
+          <li>The review itself, including a comment and a numeric rating</li>
+          <li>The author who wrote this review, including its name</li>
+          <li>The movie this review is about, including its name and year of publication</li>
+        </ol>
+        <p>If the website owner wants other organizations to be able to link to reviews or authors of the website, it should provide globally unique identifiers. Documents created by other organizations and published on external domains will then be able to provide link references to these resources.</p>
+        <aside class="example">
+          <p>Globally unique URIs for both reviews and authors could look like this:</p>
+          <pre>
+            http://example.org/id/reviews/6283746
+            http://example.org/id/authors/1536
+          </pre>
+          <p>To expose these URIs to the website's audience, these URIs need to be added to the API response:</p>
+          <pre>
+            {
+              "@id": "https://example.org/id/reviews/6283746",
+              "author": {
+                "@id": "https://example.org/id/authors/1536",
+                "name": "Vincent Vega"
+              },
+              "movie": {
+                "title": "Pulp Fiction",
+                "year": 1994
+              },
+              "comment": "What an impressive movie!",
+              "rating": 9.5
+            }
+          </pre>
+          <p>Please note the corresponding REST endpoint remains unchanged and is still:</p>
+          <pre>
+            https://api.example.org/v1/reviews/6283746
+          </pre>
+        </aside>
+        <p>This example contains two modifications compared to the previous example:</p>
+        <ol>
+          <li>The attribute name has changed from `id` to `@id`</li>
+          <li>The local identifier is replaced with the globally unique URI</li>
+        </ol>
+        <p class="note">If there is a certain need for publishing the local identifiers, there is nothing against publishing both. In that case, there would be an `id` attribute as well as an `@id` attribute.</p>
+        <p class="note">The URI of the thing resource must not be the same as the document describing the resource, because there should be a clear distinction between the thing itself and documents describing the thing.
+          Read more about this in the <a href="https://www.w3.org/TR/cooluris/">Cool URIs for the Semantic Web</a> article.</p>
+      </section>
+      <section id="level-0-external-uris">
+        <h3>Link to external resource URIs</h3>
+        <p>TODO</p>
+      </section>
+    </section>
+  </body>
+</html>
