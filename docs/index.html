@@ -42,74 +42,72 @@
     </section>
     <section id="terminology">
       <h2>Terminology</h2>
-      <p>TODO</p>
+      <dl>
+        <dt>
+          <dfn id="dfn-resource">Resource</dfn>
+        </dt>
+        <dd>
+          <p>TODO</p>
+        </dd>
+        <dt>
+          <dfn id="dfn-semantic-web">Semantic Web</dfn>
+        </dt>
+        <dd>
+          <p>TODO</p>
+        </dd>
+        <dt>
+          <dfn id="dfn-uri">URI</dfn>
+        </dt>
+        <dd>
+          <p>TODO</p>
+        </dd>
+      </dl>
     </section>
-    <section id="level-0">
-      <h2>Level 0: Use globally unique identifiers</h2>
-      <p>TODO: uitleg over URIs</p>
-      <section id="level-0-own-uris">
+    <section id="level-1">
+      <h2>Level 1: Publish globally unique identifiers</h2>
+      <p>The <a href="#dfn-semantic-web">Semantic Web</a> is built around the basic principle that we need to use the same names when we publish information about the same things. This does not only account for real-world objects like a person or a building, but also for attribute/relationship names and more abstract concepts like a person's gender or interest. Doing this allows a machine to interpret how multiple sources of information relate to each other.</p>
+      <p>The <a href="#dfn-uri">URI</a> standard offers a uniform syntax for globally unique identifiers, which can be used to .....</p>
+      <section id="level-1-own-uris">
         <h3>Publish URIs for your own data</h3>
-        <p>It's pretty common for organizations to create local identifiers to store and publish information about resources. In many cases, these local identifiers are primarily used as a unique identifier for storing the data in a local database (as a primary or foreign key) and for exposing unique URLs to make the information available on the web.</p>
+        <p>TODO</p>
         <aside class="example">
-          <p>If a movie review website would publish a review about the movie Pulp Fiction, it might be available as an HTML page to view the information from a web browser:</p>
+          <p>Our DBeerPedia website offers a catalogue for craft beers, where information about each individual beer can be viewed in a web browser as an HTML web page. The URL for the web page offering information about the beer <i>La Trappe Quadrupel</i> would be:</p>
           <pre>
-            https://example.org/reviews/6283746/pulp-fiction
+            https://dbeerpedia.org/beers/6283746/la-trappe-quadrupel
           </pre>
-          <p>If this same website offers a REST API, the same review would also be available at:
+          <p>Because we want developers to build cool end-user apps by leveraging our data, we also provide a REST API. The URL for the same piece of information in a more structured form is:</p>
           <pre>
-            https://api.example.org/v1/reviews/6283746
+            https://api.dbeerpedia.org/v1/beers/6283746
           </pre>
-          <p>And the corresponding response payload would typically look like this:</p>
+          <p>The corresponding JSON response payload would be:</p>
           <pre>
             {
               "id": 6283746,
-              "author": {
-                "id": 1536,
-                "name": "Vincent Vega"
-              },
-              "movie": {
-                "title": "Pulp Fiction",
-                "year": 1994
-              },
-              "comment": "What an impressive movie!",
-              "rating": 9.5
+              "name": "La Trappe Quadrupel",
+              "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born."
             }
           </pre>
         </aside>
-        <p>In this example, it's interesting to note that there are multiple documents describing the same review. In the API response, the value of the `id` attribute is probably the primary key of the record in which this review is stored in the website's database. This is often a numeric value which might be automatically incremented for every new review, but it could also be some randomly generated value, like a UUID.</p>
-        <p>Another interesting thing to note is that the HTML URL does not only contain this (locally) unique identifier, but also some human-readable value (often called a "slug") to make the URL more attractive for humans and to improve SEO (Search Engine Optimization).</p>
-        <p>The example API response provides information about 3 different resources:</p>
-        <ol>
-          <li>The review itself, including a comment and a numeric rating</li>
-          <li>The author who wrote this review, including its name</li>
-          <li>The movie this review is about, including its name and year of publication</li>
-        </ol>
-        <p>If the website owner wants other organizations to be able to link to reviews or authors of the website, it should provide globally unique identifiers. Documents created by other organizations and published on external domains will then be able to provide link references to these resources.</p>
+        <p>In this example, it's interesting to note that there are multiple documents describing the same beer, namely the HTML web page and the API response. There could even be more than one API, such as a GraphQL service. In the API response, the value of the `id` attribute is probably the primary key of the record in which this review is stored in the website's database.</p>
+        <p>Another interesting thing to note is that the HTML URL does not only contain this local identifier, but also some human-readable value (often called a "slug") to make the URL more attractive for humans and to improve SEO (Search Engine Optimization).</p>
+        <p>If the website owner wants other organizations to be able to link to this beer (e.g. a beer review website), it should provide globally unique identifiers. Documents created by other organizations and published on external domains will then be able to provide link references to these resources.</p>
         <aside class="example">
-          <p>Globally unique URIs for both reviews and authors could look like this:</p>
+          <p>Globally unique URIs look like this:</p>
           <pre>
-            http://example.org/id/reviews/6283746
-            http://example.org/id/authors/1536
+            http://dbeerpedia.org/id/beer/6283746
           </pre>
           <p>To expose these URIs to the website's audience, these URIs need to be added to the API response:</p>
           <pre>
             {
-              "@id": "https://example.org/id/reviews/6283746",
-              "author": {
-                "@id": "https://example.org/id/authors/1536",
-                "name": "Vincent Vega"
-              },
-              "movie": {
-                "title": "Pulp Fiction",
-                "year": 1994
-              },
-              "comment": "What an impressive movie!",
-              "rating": 9.5
+              "@id": "http://dbeerpedia.org/id/beer/6283746",
+              "name": "La Trappe Quadrupel",
+              "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born."
             }
           </pre>
-          <p>Please note the corresponding REST endpoint remains unchanged and is still:</p>
+          <p>Please note the corresponding web page and REST endpoints remains unchanged:</p>
           <pre>
-            https://api.example.org/v1/reviews/6283746
+            https://dbeerpedia.org/beers/6283746/la-trappe-quadrupel
+            https://api.dbeerpedia.org/v1/beers/6283746
           </pre>
         </aside>
         <p>This example contains two modifications compared to the previous example:</p>
@@ -117,9 +115,7 @@
           <li>The attribute name has changed from `id` to `@id`</li>
           <li>The local identifier is replaced with the globally unique URI</li>
         </ol>
-        <p class="note">If there is a certain need for publishing the local identifiers, there is nothing against publishing both. In that case, there would be an `id` attribute as well as an `@id` attribute.</p>
-        <p class="note">The URI of the thing resource must not be the same as the document describing the resource, because there should be a clear distinction between the thing itself and documents describing the thing.
-          Read more about this in the <a href="https://www.w3.org/TR/cooluris/">Cool URIs for the Semantic Web</a> article.</p>
+        <p class="note">If there is a certain need for publishing local identifiers, there is nothing against publishing both. In that case, there could be an `id` attribute as well as an `@id` attribute.</p>
       </section>
     </section>
     <section id="guidelines">
