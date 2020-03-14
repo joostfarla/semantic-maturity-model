@@ -28,19 +28,19 @@
         This document describes a maturity model to uplift existing API's to semantically rich API's.
       </p>
     </section>
-    <section id="intro">
+    <section>
       <h2>Introduction</h2>
       <p>TODO</p>
-      <section id="intro-audience">
+      <section>
         <h3>Audience</h3>
         <p>TODO</p>
       </section>
-      <section id="intro-goals">
+        <section>
         <h3>Goals</h3>
         <p>TODO</p>
       </section>
     </section>
-    <section id="terminology">
+    <section>
       <h2>Terminology</h2>
       <dl>
         <dt>
@@ -61,42 +61,65 @@
         <dd>
           <p>TODO</p>
         </dd>
+        <dt>
+          <dfn id="dfn-structured-data">Structured Data</dfn>
+        </dt>
+        <dd>
+          <p>TODO</p>
+        </dd>
       </dl>
     </section>
     <section id="level-1">
-      <h2>Level 1: Publish globally unique identifiers</h2>
-      <p>The <a href="#dfn-semantic-web">Semantic Web</a> is built around the basic principle that we need to use the same names when we publish information about the same things. This does not only account for real-world objects like a person or a building, but also for attribute/relationship names and more abstract concepts like a person's gender or interest. Doing this allows a machine to interpret how multiple sources of information relate to each other.</p>
-      <p>The <a href="#dfn-uri">URI</a> standard offers a uniform syntax for globally unique identifiers, which can be used to .....</p>
-      <section id="level-1-own-uris">
-        <h3>Publish URIs for your own data</h3>
+      <h2>Level 1: Globally unique identifiers</h2>
+      <p>The <a href="#dfn-semantic-web">Semantic Web</a> is built around the basic principle that we need to use the same names when we publish information about the same things. This does not only account for identifying real-world objects like a person or a building, but also for attribute/relationship names and more abstract concepts like a person's gender or interest. Doing this allows a machine to interpret how multiple sources of information relate to each other.</p>
+      <section>
+        <h3>Create URIs</h3>
+        <p>If data publishers want other organizations to be able to link to this beer (e.g. a beer review website), they should provide globally unique identifiers. Documents created by other organizations and published on external domains will then be able to provide link references to these resources.</p>
+        <p>The <a href="#dfn-uri">URI</a> standard offers a uniform syntax for globally unique identifiers, which can be used to .....</p>
         <p>TODO</p>
+      </section>
+      <section>
+        <h3>Consistent URIs across multiple documents</h3>
+        <p>Data is typically published in many forms, like HTML web pages and JSON(-like) documents provided by APIs or other services. In many cases, multiple documents provide the same information about the same thing(s), but in a different format and accessible via different interfaces and protocols.</p>
         <aside class="example">
-          <p>Our DBeerPedia website offers a catalogue for craft beers, where information about each individual beer can be viewed in a web browser as an HTML web page. The URL for the web page offering information about the beer <i>La Trappe Quadrupel</i> would be:</p>
+          <p>Our DBeerPedia website offers a catalogue for craft beers, where information about each individual beer can be viewed in a web browser as an HTML web page. The URI for the web page offering information about the beer <i>La Trappe Quadrupel</i> would be:</p>
           <pre>
             https://dbeerpedia.org/beers/6283746/la-trappe-quadrupel
           </pre>
-          <p>Because we want developers to build cool end-user apps by leveraging our data, we also provide a REST API. The URL for the same piece of information in a more structured form is:</p>
+          <p>Because we want developers to build cool end-user apps by leveraging our data, we also provide a REST API. The URI for the document providing the same information via a more machine-friendly interface is:</p>
           <pre>
             https://api.dbeerpedia.org/v1/beers/6283746
           </pre>
-          <p>The corresponding JSON response payload would be:</p>
+          <p>In this example, it's interesting to note that both URIs serve a document describing the same beer. There could even be more than one API, such as a GraphQL or gRPC service, which even increases the number of access mechanisms for the same information.</p>
+        </aside>
+        <p>Because multiple documents (accessable by different URIs) are describing the same thing, it's important that all documents refer to the same globally unique identifier (URI) for the thing. Hence it's crucial that there is a clear distinction between a thing and the document(s) describing this thing.</p>
+        <p>By creating URIs for things instead of just documents, data consumers can discover that multiple sources of information are describing the same thing and other data publishers will be able to link to the product itself instead of an individual document describing the product.</p>
+        <aside class="example">
+          <p>Web pages typically include <a href="#dfn-structured-data">Structured Data</a> to help search engines to understand the content of the document. An example for a piece of structured data in a web page's `&lt;head&gt;` section would be:</p>
           <pre>
+            &lt;script type="application/ld+json"&gt;
             {
-              "id": 6283746,
+              "@context": "https://schema.org",
+              "@type": "Product",
               "name": "La Trappe Quadrupel",
               "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born."
             }
+            &lt;/script&gt;
           </pre>
-        </aside>
-        <p>In this example, it's interesting to note that there are multiple documents describing the same beer, namely the HTML web page and the API response. There could even be more than one API, such as a GraphQL service. In the API response, the value of the `id` attribute is probably the primary key of the record in which this review is stored in the website's database.</p>
-        <p>Another interesting thing to note is that the HTML URL does not only contain this local identifier, but also some human-readable value (often called a "slug") to make the URL more attractive for humans and to improve SEO (Search Engine Optimization).</p>
-        <p>If the website owner wants other organizations to be able to link to this beer (e.g. a beer review website), it should provide globally unique identifiers. Documents created by other organizations and published on external domains will then be able to provide link references to these resources.</p>
-        <aside class="example">
-          <p>Globally unique URIs look like this:</p>
+          <p>The problem here is that this description does not contain a URI for the beer (product). As a result, search engines will interpret this as an anonymous piece of information, which happens to reside in this HTML document.</p>
+          <p>Here is an example including a URI:</p>
           <pre>
-            http://dbeerpedia.org/id/beer/6283746
+            &lt;script type="application/ld+json"&gt;
+            {
+              "@context": "https://schema.org",
+              "@id": "http://dbeerpedia.org/id/beer/6283746",
+              "@type": "Product",
+              "name": "La Trappe Quadrupel",
+              "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born."
+            }
+            &lt;/script&gt;
           </pre>
-          <p>To expose these URIs to the website's audience, these URIs need to be added to the API response:</p>
+          <p>In the second example, it's interesting to note that the URI for the beer differs from the web page's URI. This distinction is important, because other URIs (e.g. as part of a REST API) might publish the same information. See for example the same information served by the DBeerPedia REST API:</p>
           <pre>
             {
               "@id": "http://dbeerpedia.org/id/beer/6283746",
@@ -104,18 +127,16 @@
               "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born."
             }
           </pre>
-          <p>Please note the corresponding web page and REST endpoints remains unchanged:</p>
+          <p>Please note the corresponding URIs for the web page and REST resource remain unchanged:</p>
           <pre>
             https://dbeerpedia.org/beers/6283746/la-trappe-quadrupel
             https://api.dbeerpedia.org/v1/beers/6283746
           </pre>
         </aside>
-        <p>This example contains two modifications compared to the previous example:</p>
-        <ol>
-          <li>The attribute name has changed from `id` to `@id`</li>
-          <li>The local identifier is replaced with the globally unique URI</li>
-        </ol>
-        <p class="note">If there is a certain need for publishing local identifiers, there is nothing against publishing both. In that case, there could be an `id` attribute as well as an `@id` attribute.</p>
+      </section>
+      <section>
+        <h3>Different URIs for different things</h3>
+        <p>TODO</p>
       </section>
     </section>
     <section id="guidelines">
