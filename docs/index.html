@@ -95,11 +95,11 @@
         <p>Because multiple documents (accessible by different URIs) are describing the same thing, it's important that all documents contain references to the same globally unique identifier (URI) for the thing. Hence it's crucial that there is a clear distinction between a thing and the document(s) describing this thing.</p>
         <p>By creating URIs for things, in addition to URIs for documents, data consumers can discover that multiple sources of information are describing the same thing and other data publishers will be able to link to the product itself instead of an individual document describing the product.</p>
         <aside class="example">
-          <p>Web pages typically include <a href="#dfn-structured-data">Structured Data</a> to help search engines to understand the content of the document. An example for a piece of structured data in a web page's `&lt;head&gt;` section would be:</p>
+          <p>Web pages typically include <a href="#dfn-structured-data">Structured Data</a> to help search engines to understand the content of the document. An example for a piece of <a href="#dfn-structured-data">Structured Data</a> in a web page's `&lt;head&gt;` section would be:</p>
           <pre>
             &lt;script type="application/ld+json"&gt;
             {
-              "@context": "https://schema.org",
+              "@context": "http://schema.org",
               "@type": "Product",
               "name": "La Trappe Quadrupel",
               "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born."
@@ -110,9 +110,9 @@
           <pre>
             &lt;script type="application/ld+json"&gt;
             {
-              "@context": "https://schema.org",
-              "@id": "http://dbeerpedia.org/id/beer/6283746",
-              "@type": "Product",
+              "@context": "http://schema.org",
+              "@id": "https://dbeerpedia.org/id/beer/6283746",
+              "@type": "CreativeWork",
               "name": "La Trappe Quadrupel",
               "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born."
             }
@@ -121,7 +121,7 @@
           <p>In this example, it's interesting to note that the URI for the beer differs from the web page's URI. This distinction is important, because other URIs (e.g. as part of a REST API) might publish the same information. See for example the same information served by the DBeerPedia REST API:</p>
           <pre>
             {
-              "@id": "http://dbeerpedia.org/id/beer/6283746",
+              "@id": "https://dbeerpedia.org/id/beer/6283746",
               "name": "La Trappe Quadrupel",
               "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born."
             }
@@ -138,7 +138,63 @@
       </section>
       <section>
         <h3>Different URIs for different things</h3>
-        <p>TODO</p>
+        <p>Documents often describe more than one thing, such as related resources or a collection of things. In addition, documents might contain links to other things (or documents) without describing the thing itself in the document. In both cases, the document should provide references to the corresponding URIs.</p>
+        <aside class="example">
+          <p>If we want to provide information about the web page itself (e.g. when the information was last modified) and also about the producer of the beer (the brewery), the corresponding <a href="#dfn-structured-data">Structured Data</a> representation would look like this:</p>
+          <pre>
+            &lt;script type="application/ld+json"&gt;
+            {
+              "@context": "http://schema.org",
+              "@id": "https://dbeerpedia.org/beers/6283746/la-trappe-quadrupel",
+              "@type": "WebPage",
+              "dateModified": "2020-03-14",
+              "mainEntity": {
+                "@id": "https://dbeerpedia.org/id/beer/6283746",
+                "@type": "CreativeWork",
+                "name": "La Trappe Quadrupel",
+                "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born.",
+                "producer": {
+                  "@id": "https://dbeerpedia.org/id/brewery/21823",
+                  "@type": "Organization",
+                  "name": "Bierbrouwerij de Koningshoeven"
+                }
+              }
+            }
+            &lt;/script&gt;
+          </pre>
+          To emphasize the separation between the three different resources, the same information could also be expressed in a more flattened JSON-LD structure:
+          <pre>
+            &lt;script type="application/ld+json"&gt;
+            {
+              "@context": "http://schema.org",
+              "@graph": [
+                {
+                  "@id": "https://dbeerpedia.org/beers/6283746/la-trappe-quadrupel",
+                  "@type": "WebPage",
+                  "dateModified": "2020-03-14",
+                  "mainEntity": {
+                    "@id": "https://dbeerpedia.org/id/beer/6283746"
+                  }
+                },
+                {
+                  "@id": "https://dbeerpedia.org/id/beer/6283746",
+                  "@type": "CreativeWork",
+                  "name": "La Trappe Quadrupel",
+                  "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born.",
+                  "producer": {
+                    "@id": "https://dbeerpedia.org/id/brewery/21823"
+                  }
+                },
+                {
+                  "@id": "https://dbeerpedia.org/id/brewery/21823",
+                  "@type": "Organization",
+                  "name": "Bierbrouwerij de Koningshoeven"
+                }
+              ]
+            }
+            &lt;/script&gt;
+          </pre>
+        </aside>
       </section>
     </section>
     <section id="guidelines">
