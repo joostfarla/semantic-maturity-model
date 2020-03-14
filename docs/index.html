@@ -118,7 +118,7 @@
             }
             &lt;/script&gt;
           </pre>
-          <p>In the second example, it's interesting to note that the URI for the beer differs from the web page's URI. This distinction is important, because other URIs (e.g. as part of a REST API) might publish the same information. See for example the same information served by the DBeerPedia REST API:</p>
+          <p>In this example, it's interesting to note that the URI for the beer differs from the web page's URI. This distinction is important, because other URIs (e.g. as part of a REST API) might publish the same information. See for example the same information served by the DBeerPedia REST API:</p>
           <pre>
             {
               "@id": "http://dbeerpedia.org/id/beer/6283746",
@@ -126,6 +126,7 @@
               "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born."
             }
           </pre>
+          <p>In this example, the attribute name `@id` is used for the URI because it aligns nicely with the JSON-LD standard. However, the choice is yours if you wish to use another name for arbitrary reasons.</p>
           <p>Please note the corresponding URIs for the web page and REST resource remain unchanged:</p>
           <pre>
             https://dbeerpedia.org/beers/6283746/la-trappe-quadrupel
