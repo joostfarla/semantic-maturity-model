@@ -93,20 +93,20 @@
           <p>In this example, it's interesting to note that both URIs serve a document describing the same beer. There could even be more than one API, such as a GraphQL or gRPC service, which even increases the number of access mechanisms for the same information.</p>
         </aside>
         <p>Because multiple documents (accessible by different URIs) are describing the same thing, it's important that all documents contain references to the same globally unique identifier (URI) for the thing. Hence it's crucial that there is a clear distinction between a thing and the document(s) describing this thing.</p>
-        <p>By creating URIs for things, in addition to URIs for documents, data consumers can discover that multiple sources of information are describing the same thing and other data publishers will be able to link to the product itself instead of an individual document describing the product.</p>
+        <p>By creating URIs for things, in addition to URIs for documents, data consumers can discover that multiple sources of information are describing the same thing and other data publishers will be able to link to the thing itself instead of an individual document describing the thing.</p>
         <aside class="example">
           <p>Web pages typically include <a href="#dfn-structured-data">Structured Data</a> to help search engines to understand the content of the document. An example for a piece of <a href="#dfn-structured-data">Structured Data</a> in a web page's `&lt;head&gt;` section would be:</p>
           <pre>
             &lt;script type="application/ld+json"&gt;
             {
               "@context": "http://schema.org",
-              "@type": "Product",
+              "@type": "CreativeWork",
               "name": "La Trappe Quadrupel",
               "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born."
             }
             &lt;/script&gt;
           </pre>
-          <p>The issue here is that this description does not contain a URI for the beer (product) itself. As a result, search engines and other consumers will interpret this as an anonymous piece of information, which happens to reside in this HTML document. Consequently, external parties will only be able to link to a particular document and not to the beer itself. Here is an example including a URI:</p>
+          <p>The issue here is that this description does not contain a URI for the beer (creative work) itself. As a result, search engines and other consumers will interpret this as an anonymous piece of information, which happens to reside in this HTML document. Consequently, external parties will only be able to link to a particular document and not to the beer itself. Here is an example including a URI:</p>
           <pre>
             &lt;script type="application/ld+json"&gt;
             {
