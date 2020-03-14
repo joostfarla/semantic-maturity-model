@@ -140,42 +140,29 @@
         <h3>Different URIs for different things</h3>
         <p>Documents often describe more than one thing, such as related resources or a collection of things. In addition, documents might contain links to other things (or documents) without describing the thing itself in the document. In both cases, the document should provide references to the corresponding URIs.</p>
         <aside class="example">
-          <p>If we would want to provide information about the web page itself (e.g. when the information was last modified) and also about the manufacturer of the beer (the brewery), the corresponding <a href="#dfn-structured-data">Structured Data</a> representation would look like this:</p>
+          <p>If we would want to provide information about the manufacturer of the beer (the brewery), the corresponding <a href="#dfn-structured-data">Structured Data</a> representation would look like this:</p>
           <pre>
             &lt;script type="application/ld+json"&gt;
             {
               "@context": "http://schema.org",
-              "@id": "https://dbeerpedia.org/beers/6283746/la-trappe-quadrupel",
-              "@type": "WebPage",
-              "dateModified": "2020-03-14",
-              "mainEntity": {
-                "@id": "https://dbeerpedia.org/id/beer/6283746",
-                "@type": "Product",
-                "name": "La Trappe Quadrupel",
-                "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born.",
-                "manufacturer": {
-                  "@id": "https://dbeerpedia.org/id/brewery/21823",
-                  "@type": "Organization",
-                  "name": "Bierbrouwerij de Koningshoeven"
-                }
+              "@id": "https://dbeerpedia.org/id/beer/6283746",
+              "@type": "Product",
+              "name": "La Trappe Quadrupel",
+              "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born.",
+              "manufacturer": {
+                "@id": "https://dbeerpedia.org/id/brewery/21823",
+                "@type": "Organization",
+                "name": "Bierbrouwerij de Koningshoeven"
               }
             }
             &lt;/script&gt;
           </pre>
-          To emphasize the separation between the three different resources, the same information could also be expressed in a more flattened JSON-LD structure:
+          To emphasize the separation between the two different resources, the same information could also be expressed in a more flattened JSON-LD structure:
           <pre>
             &lt;script type="application/ld+json"&gt;
             {
               "@context": "http://schema.org",
               "@graph": [
-                {
-                  "@id": "https://dbeerpedia.org/beers/6283746/la-trappe-quadrupel",
-                  "@type": "WebPage",
-                  "dateModified": "2020-03-14",
-                  "mainEntity": {
-                    "@id": "https://dbeerpedia.org/id/beer/6283746"
-                  }
-                },
                 {
                   "@id": "https://dbeerpedia.org/id/beer/6283746",
                   "@type": "Product",
@@ -193,6 +180,18 @@
               ]
             }
             &lt;/script&gt;
+          </pre>
+          <p>The REST/JSON equivalent for the previous examples would be:</p>
+          <pre>
+            {
+              "@id": "https://dbeerpedia.org/id/beer/6283746",
+              "name": "La Trappe Quadrupel",
+              "description": "In 1991, The Koningshoeven brewery baptized her beloved Quadrupel under the approving glance of the monks. A closely guarded recipe became reality, and the first Quadrupel beer in the world was born.",
+              "brewedBy": {
+                "@id": "https://dbeerpedia.org/id/brewery/21823",
+                "name": "Bierbrouwerij de Koningshoeven"
+              }
+            }
           </pre>
         </aside>
       </section>
