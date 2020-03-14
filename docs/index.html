@@ -132,6 +132,8 @@
             https://api.dbeerpedia.org/v1/beers/6283746
           </pre>
         </aside>
+        <p>Upcoming API standards like GraphQL and gRPC do not follow REST principles, which (among other aspects) means that documents are not accessible by its URI. Therefore, it's even more important to include URIs in API responses, regardless of the interaction protocol or the document format.</p>
+        <p class="note">URIs can be treated as opaque strings, and thus every standard supporting the string data-type (which is literally any standard) should be able to handle URIs as values.</p>
       </section>
       <section>
         <h3>Different URIs for different things</h3>
